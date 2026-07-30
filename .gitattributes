@@ -1,0 +1,8 @@
+# Проект собирается в Linux-контейнере, поэтому в репозитории и в рабочей копии
+# держим LF: иначе CRLF с Windows приезжает в образ и в CI.
+* text=auto eol=lf
+
+*.woff2 binary
+*.png binary
+*.jpg binary
+*.ico binary

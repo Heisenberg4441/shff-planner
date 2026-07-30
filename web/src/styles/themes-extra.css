@@ -1,0 +1,39 @@
+/* ============================================================
+   Две дополнительные акцентные семьи для планировщика.
+   Ядро дизайн-системы не трогаем: продукт расширяет её у себя,
+   в той же идиоме, что tokens/themes.css.
+   ============================================================ */
+
+[data-theme='plasma'] {
+  --accent: #ff5f6d;
+  --accent-dim: #a83e48;
+  --accent-deep: #2b0d10;
+  --accent-rgb: 255, 95, 109;
+  --on-accent: #1a0406;
+  --border: #2a1c1e;
+  --border-lit: #3d2a2c;
+  --panel: #171112;
+  --panel-2: #120d0e;
+  --bg: #0c0809;
+  --text: #e0d6d7;
+  --muted: #877b7c;
+  --faint: #56494a;
+  --danger: #ff8b8b;
+  --warn: #ffb84d;
+}
+
+[data-theme='ice'] {
+  --accent: #cfe3ff;
+  --accent-dim: #7f93ad;
+  --accent-deep: #16202b;
+  --accent-rgb: 207, 227, 255;
+  --on-accent: #0a1017;
+  --border: #1d242b;
+  --border-lit: #2b3540;
+  --panel: #111519;
+  --panel-2: #0d1114;
+  --bg: #080a0d;
+  --text: #d6dde4;
+  --muted: #7c858d;
+  --faint: #4d555c;
+}

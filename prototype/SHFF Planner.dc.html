@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/layout.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/tokens/themes.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/base/reset.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/base/crt.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/css/site.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/css/primitives.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/pages.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/article.css">
+  <link rel="stylesheet" href="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/styles.css">
+  <script src="_ds/shff-design-system-97e1cccc-d574-4ca0-8cca-082936ace282/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; background: var(--bg); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--ink-bright); }
+    @keyframes shff-caret { 50% { opacity: 0; } }
+    /* two extra accent families in the same idiom as tokens/themes.css */
+    [data-theme="plasma"] {
+      --accent: #ff5f6d; --accent-dim: #a83e48; --accent-deep: #2b0d10; --accent-rgb: 255, 95, 109;
+      --on-accent: #1a0406; --border: #2a1c1e; --border-lit: #3d2a2c;
+      --panel: #171112; --panel-2: #120d0e; --bg: #0c0809;
+      --text: #e0d6d7; --muted: #877b7c; --faint: #56494a; --danger: #ff8b8b; --warn: #ffb84d;
+    }
+    [data-theme="ice"] {
+      --accent: #cfe3ff; --accent-dim: #7f93ad; --accent-deep: #16202b; --accent-rgb: 207, 227, 255;
+      --on-accent: #0a1017; --border: #1d242b; --border-lit: #2b3540;
+      --panel: #111519; --panel-2: #0d1114; --bg: #080a0d;
+      --text: #d6dde4; --muted: #7c858d; --faint: #4d555c;
+    }
+  </style>
+</helmet>
+
+<div data-theme="{{ themeAttr }}" style="min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 13px;">
+
+  <sc-if value="{{ crtOn }}" hint-placeholder-val="{{ true }}"><div class="scanlines"></div></sc-if>
+
+  <header class="topbar">
+    <div class="wrap" style="display: flex; align-items: center; gap: 18px;">
+      <a class="brand" href="#" style="display: flex; align-items: baseline; gap: 9px;">
+        <span class="blk">SHFF</span>
+        <span style="color: var(--muted); font-size: 12px; letter-spacing: 0.4px;">planner</span>
+      </a>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+        <span style="color: var(--faint); font-size: 11.5px; letter-spacing: 1.2px;">LOCAL · NO CLOUD</span>
+        <span class="badge ok" style="font-size: 11px;"><span class="led"></span>synced</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="max-width: 1200px; margin: 0 auto; padding: 30px 28px 90px;">
+
+    <div style="display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 22px;">
+      <div>
+        <span style="display: block; color: var(--accent); font-size: 12.5px; margin-bottom: 10px;">$ shff-plan open --granularity=minute<span style="animation: shff-caret 1s steps(1) infinite;">_</span></span>
+        <h1 style="margin: 0; font-family: var(--sans); font-size: clamp(28px, 3.4vw, 40px); font-weight: 700; letter-spacing: -0.6px; color: var(--ink-bright);">Планировщик дня</h1>
+      </div>
+      <p style="margin: 0 0 4px; max-width: 420px; font-family: var(--sans); font-size: 14.5px; line-height: 1.6; color: var(--muted); text-wrap: pretty;">Не календарь встреч, а полное расписание суток — поминутно. Клик по ячейке ставит блок, дубль растягивает день на неделю или месяц.</p>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button class="chip" onClick="{{ prev }}" style="min-width: 30px;">‹</button>
+        <div style="min-width: 220px; text-align: center;">
+          <div style="color: var(--ink-bright); font-size: 14px; letter-spacing: 0.4px;">{{ rangeLabel }}</div>
+          <div style="color: var(--faint); font-size: 11px; margin-top: 2px;">{{ rangeSub }}</div>
+        </div>
+        <button class="chip" onClick="{{ next }}" style="min-width: 30px;">›</button>
+        <button class="chip" onClick="{{ goToday }}" style="margin-left: 6px;">сегодня</button>
+      </div>
+
+      <div style="display: flex; gap: 6px; margin-left: auto;">
+        <button class="{{ chipDay }}" onClick="{{ setDay }}">день</button>
+        <button class="{{ chipWeek }}" onClick="{{ setWeek }}">неделя</button>
+        <button class="{{ chipMonth }}" onClick="{{ setMonth }}">месяц</button>
+      </div>
+      <button class="btn ghost sm" onClick="{{ openNewQuick }}">[&nbsp;+ блок&nbsp;]</button>
+      <button class="btn primary sm" onClick="{{ openDupDay }}">[&nbsp;Дублировать день →&nbsp;]</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 228px; gap: 18px; align-items: start; margin-top: 20px;">
+
+      <div style="min-width: 0;">
+
+        <sc-if value="{{ isDay }}" hint-placeholder-val="{{ true }}">
+          <div style="border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden; box-shadow: 0 24px 60px -24px rgba(0,0,0,0.8);">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.012);">
+              <span class="dot r" style="width: 9px; height: 9px; border-radius: 50%; background: #4a2226;"></span>
+              <span class="dot y" style="width: 9px; height: 9px; border-radius: 50%; background: #45401f;"></span>
+              <span class="dot g" style="width: 9px; height: 9px; border-radius: 50%; background: #1e3a2a;"></span>
+              <span style="margin-left: 6px; color: var(--faint); font-size: 11.5px;">~/planner/{{ dateKey }} — {{ dayCountLabel }}</span>
+              <span style="margin-left: auto; color: var(--faint); font-size: 11.5px;">// клик по пустой ячейке — новый блок</span>
+            </div>
+
+            <div style="max-height: 660px; overflow-y: auto;">
+              <div style="display: grid; grid-template-columns: 66px minmax(0, 1fr);">
+                <div style="border-right: 1px solid var(--border);">
+                  <sc-for list="{{ hours }}" as="h" hint-placeholder-count="18">
+                    <div style="{{ h.style }}">{{ h.label }}</div>
+                  </sc-for>
+                </div>
+                <div style="position: relative;">
+                  <sc-for list="{{ slots }}" as="s" hint-placeholder-count="72">
+                    <div style="{{ s.style }}" onClick="{{ s.onClick }}" title="{{ s.title }}"><span style="{{ s.hintStyle }}">+ {{ s.label }}</span></div>
+                  </sc-for>
+                  <sc-for list="{{ dayBlocks }}" as="b" hint-placeholder-count="0">
+                    <div style="{{ b.style }}">
+                      <div style="display: flex; align-items: baseline; gap: 8px; min-width: 0;">
+                        <span style="{{ b.titleStyle }}">{{ b.t }}</span>
+                        <span style="color: var(--text); font-size: 10.5px; white-space: nowrap;">{{ b.range }} <span style="color: var(--accent);">+{{ b.dur }}</span></span>
+                        <span style="margin-left: auto; display: flex; gap: 4px; flex: none;">
+                          <button onClick="{{ b.onEdit }}" style="background: none; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); font-family: var(--mono); font-size: 10px; padding: 1px 5px; cursor: pointer;" style-hover="color: var(--accent); border-color: var(--accent-dim);">правка</button>
+                          <button onClick="{{ b.onDup }}" style="background: none; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); font-family: var(--mono); font-size: 10px; padding: 1px 5px; cursor: pointer;" style-hover="color: var(--accent); border-color: var(--accent-dim);">дубль</button>
+                          <button onClick="{{ b.onDel }}" style="background: none; border: 1px solid var(--border); border-radius: 3px; color: var(--faint); font-family: var(--mono); font-size: 10px; padding: 1px 5px; cursor: pointer;" style-hover="color: var(--danger); border-color: var(--danger);">✕</button>
+                        </span>
+                      </div>
+                      <span style="{{ b.catStyle }}">// {{ b.cat }}{{ b.noteText }}</span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ showNow }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ nowStyle }}"><span style="position: absolute; left: 0; top: -6px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent);"></span><span style="position: absolute; right: 6px; top: -14px; color: var(--accent); font-size: 10.5px;">{{ nowLabel }}</span></div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isWeek }}" hint-placeholder-val="{{ false }}">
+          <div style="border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 56px repeat(7, minmax(0, 1fr)); border-bottom: 1px solid var(--border);">
+              <div style="border-right: 1px solid var(--border);"></div>
+              <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+                <div onClick="{{ d.onOpen }}" style="{{ d.headStyle }}">
+                  <div style="{{ d.wdStyle }}">{{ d.wd }}</div>
+                  <div style="color: var(--ink-bright); font-size: 15px; margin-top: 2px;">{{ d.dnum }}</div>
+                  <div style="color: var(--faint); font-size: 10.5px; margin-top: 3px;">{{ d.load }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="max-height: 640px; overflow-y: auto;">
+              <div style="display: grid; grid-template-columns: 56px repeat(7, minmax(0, 1fr));">
+                <div style="border-right: 1px solid var(--border);">
+                  <sc-for list="{{ weekHours }}" as="h" hint-placeholder-count="18">
+                    <div style="{{ h.style }}">{{ h.label }}</div>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+                  <div style="{{ d.colStyle }}">
+                    <sc-for list="{{ d.slots }}" as="s" hint-placeholder-count="18">
+                      <div style="{{ s.style }}" onClick="{{ s.onClick }}"></div>
+                    </sc-for>
+                    <sc-for list="{{ d.blocks }}" as="b" hint-placeholder-count="0">
+                      <div style="{{ b.style }}" onClick="{{ b.onEdit }}" title="{{ b.title }}">
+                        <span style="{{ b.titleStyle }}">{{ b.t }}</span>
+                        <span style="color: var(--faint); font-size: 9.5px;">{{ b.range }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px; color: var(--faint); font-size: 11.5px;">
+            <span>// клик по колонке — открыть день, клик по часу — новый блок</span>
+            <button class="btn ghost sm" onClick="{{ openDupWeekAll }}" style="margin-left: auto;">[&nbsp;Дублировать неделю →&nbsp;]</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMonth }}" hint-placeholder-val="{{ false }}">
+          <div style="border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden;">
+            <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-bottom: 1px solid var(--border);">
+              <sc-for list="{{ wdHead }}" as="w" hint-placeholder-count="7">
+                <div style="{{ w.style }}">{{ w.label }}</div>
+              </sc-for>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));">
+              <sc-for list="{{ monthDays }}" as="d" hint-placeholder-count="42">
+                <div style="{{ d.style }}" onClick="{{ d.onOpen }}">
+                  <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="{{ d.numStyle }}">{{ d.dnum }}</span>
+                    <span style="margin-left: auto; color: var(--faint); font-size: 10px;">{{ d.load }}</span>
+                  </div>
+                  <div style="display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--panel-2); margin-top: 8px;">
+                    <sc-for list="{{ d.segs }}" as="g" hint-placeholder-count="0">
+                      <div style="{{ g.style }}"></div>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 3px;">
+                    <sc-for list="{{ d.peek }}" as="p" hint-placeholder-count="0">
+                      <div style="{{ p.style }}">{{ p.label }}</div>
+                    </sc-for>
+                  </div>
+                  <div style="{{ d.moreStyle }}">{{ d.more }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: 12px; color: var(--faint); font-size: 11.5px;">
+            <span>// цветная полоса — плотность суток по категориям</span>
+            <button class="btn ghost sm" onClick="{{ openDupMonth }}" style="margin-left: auto;">[&nbsp;Раскатать день на месяц →&nbsp;]</button>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <aside style="display: flex; flex-direction: column; gap: 10px; position: sticky; top: 84px; max-height: calc(100vh - 104px); overflow-y: auto; padding-right: 2px;">
+
+        <div class="panel" style="padding: 12px 13px;">
+          <div style="color: var(--faint); font-size: 10.5px; letter-spacing: 1.3px; margin-bottom: 9px;">// ЦВЕТОВАЯ СХЕМА</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+            <sc-for list="{{ themeOpts }}" as="t" hint-placeholder-count="5">
+              <button onClick="{{ t.onPick }}" style="{{ t.style }}"><span style="{{ t.dotStyle }}"></span>{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="panel" style="padding: 12px 13px;">
+          <div style="display: flex; align-items: baseline; margin-bottom: 9px;">
+            <span style="color: var(--faint); font-size: 10.5px; letter-spacing: 1.3px;">// СЕЙЧАС</span>
+            <span style="margin-left: auto; color: var(--accent); font-size: 11px;">{{ nowLabel }}</span>
+          </div>
+          <div style="color: var(--ink-bright); font-size: 12.5px; line-height: 1.35;">{{ nowTitle }}</div>
+          <div style="color: var(--muted); font-size: 11px; margin-top: 3px;">{{ nowMeta }}</div>
+          <div style="height: 3px; background: var(--panel-2); border-radius: 2px; margin: 9px 0 9px; overflow: hidden;">
+            <div style="{{ nowBarStyle }}"></div>
+          </div>
+          <div style="display: flex; gap: 8px; font-size: 11px; color: var(--faint);">
+            <span>дальше</span><span style="margin-left: auto; color: var(--text); text-align: right;">{{ nextLabel }}</span>
+          </div>
+        </div>
+
+        <div class="panel" style="padding: 12px 13px;">
+          <div style="color: var(--faint); font-size: 10.5px; letter-spacing: 1.3px; margin-bottom: 9px;">// СУТКИ {{ dateKey }}</div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="7">
+              <div style="display: flex; gap: 8px; font-size: 11px;">
+                <span style="color: var(--faint);">{{ m.k }}</span>
+                <span style="{{ m.style }}">{{ m.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--panel-2); margin-top: 11px;">
+            <sc-for list="{{ dayStrip }}" as="g" hint-placeholder-count="4">
+              <div style="{{ g.style }}"></div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ balanceOn }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--border);">
+              <sc-for list="{{ balance }}" as="c" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; gap: 7px; font-size: 11px;">
+                  <span style="{{ c.dotStyle }}"></span>
+                  <span style="color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ c.label }}</span>
+                  <span style="margin-left: auto; color: var(--ink-bright);">{{ c.hours }}</span>
+                  <span style="color: var(--faint); min-width: 30px; text-align: right;">{{ c.pct }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="panel" style="padding: 12px 13px;">
+          <div style="display: flex; align-items: baseline; margin-bottom: 9px;">
+            <span style="color: var(--faint); font-size: 10.5px; letter-spacing: 1.3px;">// ДЫРЫ В РАЗМЕТКЕ</span>
+            <span style="margin-left: auto; color: var(--warn); font-size: 11px;">{{ gapsTotal }}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <sc-for list="{{ gaps }}" as="g" hint-placeholder-count="3">
+              <button onClick="{{ g.onFill }}" style="{{ g.style }}">
+                <span style="color: var(--text); font-size: 11px;">{{ g.range }}</span>
+                <span style="margin-left: auto; color: var(--faint); font-size: 10.5px;">{{ g.dur }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="{{ gapsEmptyStyle }}">// сутки размечены целиком</div>
+        </div>
+
+        <div class="panel" style="padding: 12px 13px;">
+          <div style="color: var(--faint); font-size: 10.5px; letter-spacing: 1.3px; margin-bottom: 8px;">// ШАБЛОНЫ ДНЯ</div>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <sc-for list="{{ templates }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.onApply }}" style="{{ t.style }}">
+                <span style="color: var(--ink-bright); font-size: 11.5px;">{{ t.name }}</span>
+                <span style="margin-left: auto; color: var(--faint); font-size: 10.5px;">{{ t.meta }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border); padding: 26px 28px; max-width: 1200px; margin: 0 auto; display: flex; gap: 18px; flex-wrap: wrap; align-items: center;">
+    <span style="font-family: var(--sans); font-style: italic; color: var(--muted); font-size: 13px;">Freedom can only live at home.</span>
+    <span style="display: flex; align-items: center; gap: 7px; color: var(--faint); font-size: 11px;">
+      <kbd class="kbd">D</kbd><kbd class="kbd">W</kbd><kbd class="kbd">M</kbd><span>вид</span>
+      <kbd class="kbd" style="margin-left: 8px;">N</kbd><span>блок</span>
+      <kbd class="kbd" style="margin-left: 8px;">C</kbd><span>дубль</span>
+      <kbd class="kbd" style="margin-left: 8px;">←</kbd><kbd class="kbd">→</kbd><span>дни</span>
+    </span>
+    <span style="margin-left: auto; color: var(--faint); font-size: 11px; letter-spacing: 1.4px;">SHFF PLANNER · ЛОКАЛЬНАЯ БАЗА · БЕЗ ТРЕКИНГА</span>
+  </footer>
+
+  <sc-if value="{{ dlgOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dlg-back open" onClick="{{ closeDlg }}">
+      <div class="dlg" onClick="{{ stop }}" role="dialog" style="width: min(560px, 100%);">
+        <div class="dlg-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="t">{{ dlgBar }}</span>
+          <button class="x" onClick="{{ closeDlg }}" aria-label="close">✕</button>
+        </div>
+        <div class="dlg-body">
+          <h3 style="margin-bottom: 4px;">{{ dlgTitle }}</h3>
+          <p style="margin-bottom: 20px; font-size: 13px;">{{ dlgLede }}</p>
+
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <label class="field">
+              <span class="field-label">Что делаешь</span>
+              <input class="input" value="{{ dTitle }}" onChange="{{ onTitle }}" placeholder="напр. deep: миграция на Nextcloud">
+            </label>
+
+            <div>
+              <span class="field-label" style="display: block; margin-bottom: 8px;">Категория</span>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <sc-for list="{{ catOpts }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.onPick }}" style="{{ c.style }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end;">
+              <label class="field">
+                <span class="field-label">Начало</span>
+                <input class="input" type="time" step="60" value="{{ dStart }}" onChange="{{ onStart }}">
+              </label>
+              <label class="field">
+                <span class="field-label">Конец</span>
+                <input class="input" type="time" step="60" value="{{ dEnd }}" onChange="{{ onEnd }}">
+              </label>
+              <div style="padding-bottom: 10px; color: var(--accent); font-size: 12.5px; white-space: nowrap;">= {{ dDur }}</div>
+            </div>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <sc-for list="{{ nudges }}" as="n" hint-placeholder-count="4">
+                <button class="chip" onClick="{{ n.onPick }}">{{ n.label }}</button>
+              </sc-for>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Заметка <span style="color: var(--faint);">// необязательно</span></span>
+              <input class="input" value="{{ dNote }}" onChange="{{ onNote }}" placeholder="что считать выполненным">
+            </label>
+
+            <sc-if value="{{ dlgWarn }}" hint-placeholder-val="{{ false }}">
+              <div style="border-left: 2px solid var(--warn); background: rgba(255,184,77,0.06); padding: 10px 14px;">
+                <span style="color: var(--warn); font-size: 11px; letter-spacing: 1.2px;">ВНИМАНИЕ</span>
+                <div style="color: var(--muted); font-size: 12px; margin-top: 4px;">{{ dlgWarnText }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
+            <button class="btn ghost danger sm" onClick="{{ delBlock }}" style="margin-right: auto;">[&nbsp;Удалить&nbsp;]</button>
+          </sc-if>
+          <button class="btn ghost sm" onClick="{{ dupThis }}">[&nbsp;Дублировать блок&nbsp;]</button>
+          <button class="btn ghost sm" onClick="{{ closeDlg }}">[&nbsp;Отмена&nbsp;]</button>
+          <button class="btn primary sm" onClick="{{ saveBlock }}">[&nbsp;Сохранить →&nbsp;]</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ dupOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dlg-back open" onClick="{{ closeDup }}">
+      <div class="dlg" onClick="{{ stop }}" role="dialog" style="width: min(620px, 100%);">
+        <div class="dlg-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="t">{{ dupBar }}</span>
+          <button class="x" onClick="{{ closeDup }}" aria-label="close">✕</button>
+        </div>
+        <div class="dlg-body">
+          <h3 style="margin-bottom: 4px;">{{ dupTitle }}</h3>
+          <p style="margin-bottom: 18px; font-size: 13px;">{{ dupLede }}</p>
+
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <sc-for list="{{ dupScopes }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.onPick }}" style="{{ s.style }}">
+                <span style="{{ s.markStyle }}">{{ s.mark }}</span>
+                <span style="color: var(--ink-bright); font-size: 12.5px;">{{ s.label }}</span>
+                <span style="margin-left: auto; color: var(--faint); font-size: 11px;">{{ s.note }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <span class="field-label" style="display: block; margin-bottom: 8px;">Только эти дни недели <span style="color: var(--faint);">// для режимов «месяц» и «дни недели»</span></span>
+            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+              <sc-for list="{{ dupWdays }}" as="w" hint-placeholder-count="7">
+                <button class="{{ w.cls }}" onClick="{{ w.onPick }}" style="min-width: 40px;">{{ w.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <span class="field-label">Что делать с тем, что уже стоит в этих днях</span>
+            <sc-for list="{{ dupModes }}" as="m" hint-placeholder-count="2">
+              <button onClick="{{ m.onPick }}" style="{{ m.style }}">
+                <span style="{{ m.markStyle }}">{{ m.mark }}</span>
+                <span style="display: block; text-align: left;"><span style="color: var(--ink-bright); font-size: 12.5px;">{{ m.label }}</span><span style="display: block; color: var(--faint); font-size: 11px; margin-top: 3px;">{{ m.sub }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="margin-top: 20px; border-left: 2px solid var(--accent-dim); background: rgba(var(--accent-rgb), 0.05); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;">
+            <span style="color: var(--accent); font-size: 12px;">$ {{ dupCmd }}</span>
+            <span style="color: var(--muted); font-size: 11.5px;">{{ dupPreview }}</span>
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn ghost sm" onClick="{{ closeDup }}">[&nbsp;Отмена&nbsp;]</button>
+          <button class="btn primary sm" onClick="{{ applyDup }}">[&nbsp;Продублировать →&nbsp;]</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div class="toast-stack">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div class="{{ t.cls }}">
+        <span class="ticon">›</span>
+        <div class="tbody"><strong>{{ t.title }}</strong><span>{{ t.text }}</span></div>
+        <button class="tx" onClick="{{ t.onClose }}" aria-label="dismiss">✕</button>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;phosphor&quot;,&quot;dock&quot;,&quot;amber&quot;,&quot;plasma&quot;,&quot;ice&quot;],&quot;default&quot;:&quot;phosphor&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Тема&quot;},&quot;slotMinutes&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;15&quot;,&quot;30&quot;],&quot;default&quot;:&quot;15&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Сетка&quot;},&quot;dayStart&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;min&quot;:0,&quot;max&quot;:10,&quot;step&quot;:1,&quot;default&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Сетка&quot;},&quot;showBalance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Панели&quot;},&quot;crt&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Панели&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'day',
+    date: '2026-07-30',
+    blocks: this.seed(),
+    dlg: null,
+    dup: null,
+    toasts: [],
+    theme: null
+  };
+
+  get themes() {
+    return [
+      { id: 'phosphor', attr: '', label: 'phosphor', swatch: '#33ff99' },
+      { id: 'dock', attr: 'dock', label: 'dock', swatch: '#33e0ff' },
+      { id: 'amber', attr: 'amber', label: 'amber', swatch: '#ffb454' },
+      { id: 'plasma', attr: 'plasma', label: 'plasma', swatch: '#ff5f6d' },
+      { id: 'ice', attr: 'ice', label: 'ice', swatch: '#cfe3ff' }
+    ];
+  }
+  get theme() {
+    const id = this.state.theme || this.props.theme || 'phosphor';
+    return this.themes.find(t => t.id === id) || this.themes[0];
+  }
+
+  /* ---------- constants & helpers ---------- */
+  get today() { return '2026-07-30'; }
+  get nowMin() { return 14 * 60 + 20; }
+  get cats() {
+    return [
+      { id: 'deep', label: 'глубокая работа', color: 'var(--accent)' },
+      { id: 'ops', label: 'операционка', color: 'var(--note)' },
+      { id: 'body', label: 'тело и быт', color: 'var(--warn)' },
+      { id: 'rest', label: 'отдых', color: 'var(--muted)' }
+    ];
+  }
+  cat(id) { return this.cats.find(c => c.id === id) || this.cats[0]; }
+  get wdShort() { return ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']; }
+  get wdFull() { return ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота']; }
+  get months() { return ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']; }
+  get monthsNom() { return ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']; }
+
+  pad(n) { return String(n).padStart(2, '0'); }
+  fmt(m) { return this.pad(Math.floor(m / 60)) + ':' + this.pad(m % 60); }
+  parse(s) { const p = String(s || '0:0').split(':').map(Number); return (p[0] || 0) * 60 + (p[1] || 0); }
+  dur(m) {
+    const h = Math.floor(m / 60), mm = m % 60;
+    if (!h) return mm + ' мин';
+    return h + ' ч' + (mm ? ' ' + mm + ' м' : '');
+  }
+  dt(k) { const p = k.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+  key(d) { return d.getFullYear() + '-' + this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()); }
+  add(d, n) { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  monday(d) { return this.add(d, -((d.getDay() + 6) % 7)); }
+  uid() { return 'b' + Math.random().toString(36).slice(2, 8); }
+  mk(s, e, t, c) { return { id: this.uid(), s: this.parse(s), e: this.parse(e), t: t, c: c }; }
+
+  step() { return Number(this.props.slotMinutes ?? 15); }
+  dayStart() { return Number(this.props.dayStart ?? 6) * 60; }
+  slotPx() { return 26; }
+  ppm() { return this.slotPx() / this.step(); }
+  list(k) { return (this.state.blocks[k] || []).slice().sort((a, b) => a.s - b.s); }
+  planned(k) { return this.list(k).reduce((a, b) => a + (b.e - b.s), 0); }
+
+  /* ---------- seed data ---------- */
+  seed() {
+    const b = {};
+    const day = (k, rows) => { b[k] = rows.map(r => this.mk(r[0], r[1], r[2], r[3])); };
+    day('2026-07-27', [
+      ['06:30', '07:10', 'Подъём, вода, зарядка', 'body'],
+      ['07:10', '08:00', 'Завтрак и обзор недели', 'ops'],
+      ['08:00', '10:00', 'Deep: план релиза Dock', 'deep'],
+      ['10:00', '10:15', 'Пауза', 'rest'],
+      ['10:15', '12:00', 'Deep: миграция БД', 'deep'],
+      ['12:00', '13:00', 'Обед и прогулка', 'body'],
+      ['13:00', '15:30', 'Deep: установщик сервисов', 'deep'],
+      ['15:30', '16:30', 'Почта, канал, ответы', 'ops'],
+      ['16:30', '18:00', 'Спортзал', 'body'],
+      ['18:00', '22:30', 'Дом, ужин, книга', 'rest']
+    ]);
+    day('2026-07-28', [
+      ['06:30', '07:20', 'Подъём, душ, завтрак', 'body'],
+      ['07:20', '08:00', 'Чтение по homelab', 'ops'],
+      ['08:00', '11:00', 'Deep: reverse proxy без боли', 'deep'],
+      ['11:00', '12:00', 'Созвоны', 'ops'],
+      ['12:00', '13:00', 'Обед', 'body'],
+      ['13:00', '16:00', 'Deep: тесты бэкапов', 'deep'],
+      ['16:00', '17:00', 'Вики: правки', 'ops'],
+      ['17:00', '18:30', 'Бег', 'body'],
+      ['18:30', '22:30', 'Офлайн, семья', 'rest']
+    ]);
+    day('2026-07-29', [
+      ['07:00', '07:40', 'Подъём, завтрак', 'body'],
+      ['07:40', '09:00', 'Разбор входящих', 'ops'],
+      ['09:00', '12:30', 'Deep: SHFF Dock UI', 'deep'],
+      ['12:30', '13:30', 'Обед', 'body'],
+      ['13:30', '15:00', 'Созвон + разбор логов', 'ops'],
+      ['15:00', '17:30', 'Deep: статья про ed25519', 'deep'],
+      ['17:30', '22:00', 'Вечер: дом, книга', 'rest']
+    ]);
+    day('2026-07-30', [
+      ['06:00', '06:20', 'Подъём, вода', 'body'],
+      ['06:20', '06:50', 'Зарядка', 'body'],
+      ['06:50', '07:20', 'Душ, завтрак', 'body'],
+      ['07:20', '08:00', 'Чтение: RSS по self-hosting', 'ops'],
+      ['08:00', '09:45', 'Deep: миграция на Nextcloud', 'deep'],
+      ['09:45', '10:00', 'Пауза, вода', 'rest'],
+      ['10:00', '11:30', 'Deep: статья «reverse proxy без боли»', 'deep'],
+      ['11:30', '12:00', 'Почта и канал', 'ops'],
+      ['12:00', '12:40', 'Обед', 'body'],
+      ['12:40', '13:00', 'Прогулка', 'body'],
+      ['13:00', '14:30', 'Deep: Dock — установщик', 'deep'],
+      ['14:30', '15:00', 'Созвон: обмен опытом', 'ops'],
+      ['15:00', '16:30', 'Deep: тесты бэкапов', 'deep'],
+      ['16:30', '17:00', 'Журнал: заметки в вики', 'ops'],
+      ['17:00', '18:00', 'Спортзал', 'body'],
+      ['18:00', '19:00', 'Ужин', 'body'],
+      ['19:00', '20:30', 'Семья, офлайн', 'rest'],
+      ['20:30', '21:30', 'Курс по сетям', 'ops'],
+      ['21:30', '22:30', 'Книга', 'rest'],
+      ['22:30', '23:00', 'Ритуал сна', 'body'],
+      ['23:00', '24:00', 'Сон', 'rest']
+    ]);
+    day('2026-07-31', [
+      ['07:00', '07:45', 'Подъём, завтрак', 'body'],
+      ['08:00', '11:00', 'Deep: разбор PR', 'deep'],
+      ['11:00', '12:00', 'Ретро недели', 'ops'],
+      ['12:00', '13:00', 'Обед', 'body'],
+      ['13:00', '15:00', 'Deep: докрутить compose-файлы', 'deep'],
+      ['15:00', '16:00', 'Бэкап-проверка', 'ops'],
+      ['16:00', '22:00', 'Вечер пятницы', 'rest']
+    ]);
+    day('2026-08-01', [
+      ['09:00', '10:00', 'Медленный завтрак', 'body'],
+      ['10:00', '13:00', 'Железо: сборка мини-сервера', 'deep'],
+      ['13:00', '14:00', 'Обед', 'body'],
+      ['14:00', '18:00', 'Прогулка и офлайн', 'rest'],
+      ['18:00', '22:00', 'Кино, дом', 'rest']
+    ]);
+    day('2026-08-02', [
+      ['09:30', '10:30', 'Завтрак', 'body'],
+      ['10:30', '12:00', 'Планирование недели', 'ops'],
+      ['12:00', '18:00', 'Отдых', 'rest'],
+      ['18:00', '19:00', 'Подготовка к неделе', 'ops'],
+      ['19:00', '22:30', 'Книга, сон', 'rest']
+    ]);
+    day('2026-08-05', [
+      ['08:00', '10:00', 'Deep: черновик статьи', 'deep'],
+      ['10:00', '11:00', 'Созвон', 'ops'],
+      ['13:00', '15:00', 'Deep: правки', 'deep']
+    ]);
+    day('2026-08-07', [
+      ['07:30', '08:30', 'Утро', 'body'],
+      ['09:00', '12:00', 'Deep: релиз', 'deep'],
+      ['18:00', '21:00', 'Отдых', 'rest']
+    ]);
+    return b;
+  }
+
+  get templates() {
+    return [
+      { id: 'work', name: 'Рабочий день', meta: '21 блок', note: '06:00–24:00, три окна глубокой работы', rows: this.seed()['2026-07-30'].map(b => [this.fmt(b.s), this.fmt(b.e), b.t, b.c]) },
+      { id: 'focus', name: 'Глубокий фокус', meta: '9 блоков', note: 'два четырёхчасовых окна, минимум операционки', rows: [
+        ['06:30', '07:15', 'Подъём, зарядка', 'body'], ['07:15', '08:00', 'Завтрак', 'body'],
+        ['08:00', '12:00', 'Deep #1', 'deep'], ['12:00', '13:00', 'Обед', 'body'],
+        ['13:00', '17:00', 'Deep #2', 'deep'], ['17:00', '17:30', 'Разбор входящих', 'ops'],
+        ['17:30', '19:00', 'Спорт', 'body'], ['19:00', '22:30', 'Офлайн', 'rest'], ['22:30', '24:00', 'Сон', 'rest'] ] },
+      { id: 'off', name: 'Выходной', meta: '6 блоков', note: 'без операционки, длинные окна отдыха', rows: [
+        ['09:00', '10:00', 'Медленный завтрак', 'body'], ['10:00', '13:00', 'Железо и эксперименты', 'deep'],
+        ['13:00', '14:00', 'Обед', 'body'], ['14:00', '18:00', 'Прогулка, офлайн', 'rest'],
+        ['18:00', '22:00', 'Дом, кино', 'rest'], ['22:00', '24:00', 'Книга, сон', 'rest'] ] },
+      { id: 'clear', name: 'Очистить сутки', meta: '0 блоков', note: 'снять всю разметку выбранного дня', rows: [] }
+    ];
+  }
+
+  /* ---------- actions ---------- */
+  toast(title, text, tone) {
+    const id = this.uid();
+    this.setState(s => ({ toasts: s.toasts.concat([{ id: id, title: title, text: text, tone: tone || '' }]) }));
+    setTimeout(() => this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })), 4200);
+  }
+  shift(n) {
+    const v = this.state.view, d = this.dt(this.state.date);
+    if (v === 'day') return this.setState({ date: this.key(this.add(d, n)) });
+    if (v === 'week') return this.setState({ date: this.key(this.add(d, 7 * n)) });
+    const x = new Date(d.getFullYear(), d.getMonth() + n, 1);
+    this.setState({ date: this.key(x) });
+  }
+  openNew(date, start) {
+    const step = this.step();
+    this.setState({ dlg: { mode: 'new', date: date, id: null, t: '', c: 'deep', s: start, e: Math.min(1440, start + Math.max(30, step)), note: '' } });
+  }
+  openEdit(date, b) {
+    this.setState({ dlg: { mode: 'edit', date: date, id: b.id, t: b.t, c: b.c, s: b.s, e: b.e, note: b.note || '' } });
+  }
+  patchDlg(p) { this.setState(s => ({ dlg: Object.assign({}, s.dlg, p) })); }
+  saveBlock() {
+    const d = this.state.dlg;
+    if (!d) return;
+    if (d.e <= d.s) return this.toast('Не сохранено', 'Конец блока должен быть позже начала.', 'warn');
+    const title = d.t.trim() || 'Без названия';
+    const blocks = Object.assign({}, this.state.blocks);
+    let arr = (blocks[d.date] || []).slice();
+    if (d.mode === 'edit') arr = arr.filter(b => b.id !== d.id);
+    arr = arr.filter(b => !(d.s < b.e && b.s < d.e));
+    arr.push({ id: d.id || this.uid(), s: d.s, e: d.e, t: title, c: d.c, note: d.note });
+    blocks[d.date] = arr.sort((a, b) => a.s - b.s);
+    this.setState({ blocks: blocks, dlg: null });
+    this.toast(d.mode === 'edit' ? 'Блок обновлён' : 'Блок поставлен', title + ' · ' + this.fmt(d.s) + '–' + this.fmt(d.e) + ' · ' + d.date);
+  }
+  delBlock() {
+    const d = this.state.dlg;
+    const blocks = Object.assign({}, this.state.blocks);
+    blocks[d.date] = (blocks[d.date] || []).filter(b => b.id !== d.id);
+    this.setState({ blocks: blocks, dlg: null });
+    this.toast('Блок снят', this.fmt(d.s) + '–' + this.fmt(d.e) + ' освободилось', 'note');
+  }
+  removeBlock(date, id) {
+    const blocks = Object.assign({}, this.state.blocks);
+    const gone = (blocks[date] || []).find(b => b.id === id);
+    blocks[date] = (blocks[date] || []).filter(b => b.id !== id);
+    this.setState({ blocks: blocks });
+    if (gone) this.toast('Блок снят', gone.t, 'note');
+  }
+  applyTemplate(tpl) {
+    const blocks = Object.assign({}, this.state.blocks);
+    blocks[this.state.date] = tpl.rows.map(r => this.mk(r[0], r[1], r[2], r[3]));
+    this.setState({ blocks: blocks });
+    this.toast('Шаблон применён', tpl.name + ' → ' + this.state.date);
+  }
+  openDup(scope, blockId) {
+    const d = this.dt(this.state.date);
+    this.setState({
+      dup: { date: this.state.date, blockId: blockId || null, scope: scope || 'week', mode: blockId ? 'merge' : 'replace', wd: [1, 2, 3, 4, 5] },
+      dlg: blockId ? null : this.state.dlg
+    });
+  }
+  patchDup(p) { this.setState(s => ({ dup: Object.assign({}, s.dup, p) })); }
+  toggleWd(n) {
+    const wd = this.state.dup.wd;
+    this.patchDup({ wd: wd.indexOf(n) >= 0 ? wd.filter(x => x !== n) : wd.concat([n]).sort() });
+  }
+  targetsFor(scope, wd) {
+    const src = this.state.dup ? this.state.dup.date : this.state.date;
+    const d0 = this.dt(src), out = [];
+    const mon = this.monday(d0);
+    const push = d => { const k = this.key(d); if (k !== src) out.push(k); };
+    if (scope === 'tomorrow') push(this.add(d0, 1));
+    else if (scope === 'restweek') { for (let i = 1; i <= 7; i++) { const d = this.add(d0, i); if (d <= this.add(mon, 6)) push(d); } }
+    else if (scope === 'workweek') { for (let i = 0; i < 5; i++) push(this.add(mon, i)); }
+    else if (scope === 'week') { for (let i = 0; i < 7; i++) push(this.add(mon, i)); }
+    else if (scope === 'month') {
+      const last = new Date(d0.getFullYear(), d0.getMonth() + 1, 0).getDate();
+      for (let i = 1; i <= last; i++) { const d = new Date(d0.getFullYear(), d0.getMonth(), i); if (wd.indexOf(d.getDay()) >= 0) push(d); }
+    } else if (scope === 'weekdays') {
+      for (let i = 1; i <= 28; i++) { const d = this.add(d0, i); if (wd.indexOf(d.getDay()) >= 0) push(d); }
+    } else if (scope === 'quarter') {
+      for (let i = 1; i <= 90; i++) { const d = this.add(d0, i); if (wd.indexOf(d.getDay()) >= 0) push(d); }
+    }
+    return out;
+  }
+  applyDup() {
+    const dup = this.state.dup;
+    const targets = this.targetsFor(dup.scope, dup.wd);
+    if (!targets.length) return this.toast('Нечего копировать', 'В выбранном диапазоне нет дней.', 'warn');
+    const src = this.list(dup.date);
+    const items = dup.blockId ? src.filter(b => b.id === dup.blockId) : src;
+    if (!items.length) return this.toast('Нечего копировать', 'В источнике нет блоков.', 'warn');
+    const blocks = Object.assign({}, this.state.blocks);
+    targets.forEach(k => {
+      const copies = items.map(b => Object.assign({}, b, { id: this.uid() }));
+      if (dup.mode === 'replace' && !dup.blockId) blocks[k] = copies;
+      else {
+        const keep = (blocks[k] || []).filter(b => !copies.some(c => c.s < b.e && b.s < c.e));
+        blocks[k] = keep.concat(copies).sort((a, b) => a.s - b.s);
+      }
+    });
+    this.setState({ blocks: blocks, dup: null });
+    const what = dup.blockId ? 'Блок' : 'День ' + dup.date;
+    this.toast(what + ' продублирован', 'затронуто дней: ' + targets.length + ' · режим: ' + (dup.mode === 'replace' && !dup.blockId ? 'замена' : 'добавление'));
+  }
+
+  componentDidMount() {
+    this._k = e => {
+      if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+      const k = e.key.toLowerCase();
+      if (k === 'escape') this.setState({ dlg: null, dup: null });
+      else if (k === 'd') this.setState({ view: 'day' });
+      else if (k === 'w') this.setState({ view: 'week' });
+      else if (k === 'm') this.setState({ view: 'month' });
+      else if (k === 'n') this.openNew(this.state.date, 9 * 60);
+      else if (k === 'c') this.openDup('week', null);
+      else if (e.key === 'ArrowLeft') this.shift(-1);
+      else if (e.key === 'ArrowRight') this.shift(1);
+    };
+    window.addEventListener('keydown', this._k);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._k); }
+
+  /* ---------- style builders ---------- */
+  blockStyle(b, geom) {
+    const c = this.cat(b.c);
+    const h = Math.max(14, (b.e - b.s) * geom.ppm - 2);
+    return 'position: absolute; left: ' + geom.left + 'px; right: ' + geom.right + 'px; top: ' + ((b.s - geom.start) * geom.ppm + 1) + 'px; height: ' + h + 'px;'
+      + ' background: color-mix(in srgb, ' + c.color + ' 11%, var(--panel-2)); border: 1px solid color-mix(in srgb, ' + c.color + ' 26%, transparent);'
+      + ' border-left: 2px solid ' + c.color + '; border-radius: 4px; padding: ' + (h > 34 ? '5px 8px' : '2px 8px') + '; overflow: hidden; cursor: pointer;'
+      + ' display: flex; flex-direction: column; gap: 2px; transition: border-color .14s ease, transform .14s ease;';
+  }
+
+  renderVals() {
+    const S = this.state, step = this.step(), start = this.dayStart(), ppm = this.ppm();
+    const d0 = this.dt(S.date);
+    const isToday = S.date === this.today;
+    const cats = this.cats;
+
+    /* toolbar */
+    const mon = this.monday(d0), sun = this.add(mon, 6);
+    let rangeLabel = S.date, rangeSub = this.wdFull[d0.getDay()];
+    if (S.view === 'week') { rangeLabel = this.key(mon) + ' — ' + this.key(sun); rangeSub = 'неделя ' + (Math.floor((d0 - new Date(d0.getFullYear(), 0, 1)) / 604800000) + 1); }
+    if (S.view === 'month') { rangeLabel = this.monthsNom[d0.getMonth()] + ' ' + d0.getFullYear(); rangeSub = new Date(d0.getFullYear(), d0.getMonth() + 1, 0).getDate() + ' суток'; }
+
+    /* day grid */
+    const hourH = 60 * ppm;
+    const hours = [];
+    for (let h = start / 60; h < 24; h++) hours.push({
+      label: this.pad(h) + ':00', h: h,
+      style: 'height: ' + hourH + 'px; padding: 4px 10px 0 0; text-align: right; color: ' + (h === Math.floor(this.nowMin / 60) && isToday ? 'var(--accent)' : 'var(--faint)') + '; font-size: 11.5px; border-top: 1px solid var(--border);'
+    });
+    const dayBlocksRaw = this.list(S.date);
+    const busy = t => dayBlocksRaw.some(b => t >= b.s && t < b.e);
+    const slots = [];
+    for (let t = start; t < 1440; t += step) {
+      const major = t % 60 === 0;
+      slots.push({
+        k: t, label: this.fmt(t) + ' + ' + this.dur(step), title: 'поставить блок с ' + this.fmt(t),
+        onClick: () => this.openNew(S.date, t),
+        style: 'height: ' + this.slotPx() + 'px; border-top: 1px ' + (major ? 'solid var(--border)' : 'dashed rgba(255,255,255,0.035)') + '; cursor: ' + (busy(t) ? 'default' : 'copy') + '; display: flex; align-items: center; padding-left: 12px; color: transparent; font-size: 11px; transition: background .14s ease, color .14s ease;',
+        hintStyle: busy(t) ? 'display: none;' : 'color: inherit;'
+      });
+    }
+    const geom = { start: start, ppm: ppm, left: 10, right: 12 };
+    const dayBlocks = dayBlocksRaw.map(b => {
+      const h = (b.e - b.s) * ppm;
+      return {
+        id: b.id, t: b.t, range: this.fmt(b.s) + '–' + this.fmt(b.e), dur: this.dur(b.e - b.s),
+        cat: this.cat(b.c).label,
+        style: this.blockStyle(b, geom),
+        titleStyle: 'color: var(--ink-bright); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;',
+        catStyle: h > 46 ? 'color: ' + this.cat(b.c).color + '; font-size: 10.5px; opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' : 'display: none;',
+        noteText: b.note ? ' · ' + b.note : '',
+        onEdit: () => this.openEdit(S.date, b),
+        onDup: () => this.openDup('weekdays', b.id),
+        onDel: () => this.removeBlock(S.date, b.id)
+      };
+    });
+
+    /* week */
+    const wPpm = 40 / 60;
+    const weekHours = [];
+    for (let h = start / 60; h < 24; h++) weekHours.push({ label: this.pad(h) + ':00', style: 'height: 40px; padding: 3px 8px 0 0; text-align: right; color: var(--faint); font-size: 11px; border-top: 1px solid var(--border);' });
+    const weekDays = [];
+    for (let i = 0; i < 7; i++) {
+      const d = this.add(mon, i), k = this.key(d), arr = this.list(k), t = this.planned(k);
+      const sel = k === S.date, tod = k === this.today;
+      const wslots = [];
+      for (let h = start / 60; h < 24; h++) wslots.push({
+        onClick: () => this.openNew(k, h * 60),
+        style: 'height: 40px; border-top: 1px solid ' + (h % 3 === 0 ? 'var(--border)' : 'rgba(255,255,255,0.03)') + '; cursor: copy;'
+      });
+      weekDays.push({
+        k: k, wd: this.wdShort[d.getDay()], dnum: this.pad(d.getDate()) + '.' + this.pad(d.getMonth() + 1),
+        load: t ? this.dur(t) : '// пусто',
+        onOpen: () => this.setState({ view: 'day', date: k }),
+        headStyle: 'padding: 10px 8px 12px; text-align: center; cursor: pointer; border-right: 1px solid var(--border); background: ' + (sel ? 'rgba(var(--accent-rgb),0.06)' : 'transparent') + ';',
+        wdStyle: 'color: ' + (tod ? 'var(--accent)' : 'var(--faint)') + '; font-size: 11px; letter-spacing: 1.2px;',
+        colStyle: 'position: relative; border-right: 1px solid var(--border); background: ' + (sel ? 'rgba(var(--accent-rgb),0.035)' : 'transparent') + ';',
+        slots: wslots,
+        blocks: arr.map(b => ({
+          t: b.t, title: b.t + ' · ' + this.fmt(b.s) + '–' + this.fmt(b.e) + ' · ' + this.dur(b.e - b.s),
+          range: this.fmt(b.s) + '–' + this.fmt(b.e) + ' · ' + this.dur(b.e - b.s),
+          style: this.blockStyle(b, { start: start, ppm: wPpm, left: 3, right: 3 }),
+          titleStyle: 'color: var(--ink-bright); font-size: 10.5px; line-height: 1.25; overflow: hidden;',
+          onEdit: () => this.openEdit(k, b)
+        }))
+      });
+    }
+
+    /* month */
+    const mFirst = new Date(d0.getFullYear(), d0.getMonth(), 1);
+    const mStart = this.monday(mFirst);
+    const wdHead = [];
+    for (let i = 0; i < 7; i++) {
+      const nm = this.wdShort[(i + 1) % 7];
+      wdHead.push({ label: nm, style: 'padding: 10px; text-align: center; color: ' + (i > 4 ? 'var(--muted)' : 'var(--faint)') + '; font-size: 11px; letter-spacing: 1.2px; border-right: 1px solid var(--border);' });
+    }
+    const monthDays = [];
+    for (let i = 0; i < 42; i++) {
+      const d = this.add(mStart, i), k = this.key(d), arr = this.list(k), tot = this.planned(k);
+      const out = d.getMonth() !== d0.getMonth(), sel = k === S.date, tod = k === this.today;
+      const segs = cats.map(c => {
+        const m = arr.filter(b => b.c === c.id).reduce((a, b) => a + (b.e - b.s), 0);
+        return { style: 'width: ' + (m / 1440 * 100) + '%; background: ' + c.color + '; opacity: .85;' };
+      }).filter(s => parseFloat(s.style.slice(7)) > 0);
+      monthDays.push({
+        k: k, dnum: d.getDate(),
+        load: tot ? this.dur(tot) : '',
+        onOpen: () => this.setState({ view: 'day', date: k }),
+        style: 'min-height: 112px; padding: 10px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; opacity: ' + (out ? '.4' : '1') + '; background: ' + (sel ? 'rgba(var(--accent-rgb),0.06)' : 'transparent') + '; transition: background .14s ease;',
+        numStyle: 'font-size: 13px; color: ' + (tod ? 'var(--accent)' : 'var(--ink-bright)') + '; ' + (tod ? 'text-shadow: 0 0 10px rgba(var(--accent-rgb),.5);' : ''),
+        segs: segs,
+        peek: arr.slice(0, 2).map(b => ({
+          label: this.fmt(b.s) + ' · ' + this.dur(b.e - b.s) + ' · ' + b.t,
+          style: 'color: var(--muted); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 2px solid ' + this.cat(b.c).color + '; padding-left: 5px;'
+        })),
+        more: arr.length > 2 ? '// ещё ' + (arr.length - 2) : '',
+        moreStyle: arr.length > 2 ? 'color: var(--faint); font-size: 10px; margin-top: 5px;' : 'display: none;'
+      });
+    }
+
+    /* balance + strip */
+    const totalPlanned = this.planned(S.date);
+    const catMin = {};
+    cats.forEach(c => { catMin[c.id] = dayBlocksRaw.filter(b => b.c === c.id).reduce((a, b) => a + (b.e - b.s), 0); });
+    const balance = cats.map(c => ({
+      label: c.label, hours: catMin[c.id] ? this.dur(catMin[c.id]) : '—',
+      pct: totalPlanned ? Math.round(catMin[c.id] / totalPlanned * 100) + '%' : '—',
+      dotStyle: 'width: 7px; height: 7px; border-radius: 2px; background: ' + c.color + '; flex: none;'
+    }));
+    const dayStrip = cats.filter(c => catMin[c.id] > 0).map(c => ({
+      style: 'width: ' + (catMin[c.id] / 1440 * 100) + '%; background: ' + c.color + '; opacity: .9;'
+    }));
+
+    /* now card */
+    const cur = isToday ? dayBlocksRaw.find(b => this.nowMin >= b.s && this.nowMin < b.e) : null;
+    const nxt = isToday ? dayBlocksRaw.find(b => b.s > this.nowMin) : dayBlocksRaw[0];
+    const nowTitle = isToday ? (cur ? cur.t : 'Ничего не размечено') : 'Другие сутки — не сегодня';
+    const nowMeta = isToday
+      ? (cur ? this.cat(cur.c).label + ' · ' + this.fmt(cur.s) + '–' + this.fmt(cur.e) + ' · осталось ' + this.dur(cur.e - this.nowMin)
+             : 'этот участок суток свободен')
+      : 'просмотр ' + S.date;
+    const nowPct = cur ? (this.nowMin - cur.s) / (cur.e - cur.s) * 100 : 0;
+
+    /* gaps */
+    const gapsRaw = [];
+    let cursor = start;
+    dayBlocksRaw.forEach(b => { if (b.s - cursor >= 15) gapsRaw.push([cursor, b.s]); cursor = Math.max(cursor, b.e); });
+    if (1440 - cursor >= 15) gapsRaw.push([cursor, 1440]);
+    const gaps = gapsRaw.slice(0, 5).map(g => ({
+      range: this.fmt(g[0]) + '–' + this.fmt(g[1]), dur: this.dur(g[1] - g[0]),
+      onFill: () => this.setState({ dlg: { mode: 'new', date: S.date, id: null, t: '', c: 'deep', s: g[0], e: g[1], note: '' } }),
+      style: 'display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; cursor: pointer; font-family: var(--mono); border-radius: 3px; background: transparent; border: 1px solid var(--border);'
+    }));
+    const gapsMin = gapsRaw.reduce((a, g) => a + (g[1] - g[0]), 0);
+
+    /* metrics */
+    const deepRuns = [];
+    dayBlocksRaw.forEach(b => {
+      if (b.c !== 'deep') return;
+      const last = deepRuns[deepRuns.length - 1];
+      if (last && last[1] === b.s) last[1] = b.e; else deepRuns.push([b.s, b.e]);
+    });
+    const longestDeep = deepRuns.reduce((a, r) => Math.max(a, r[1] - r[0]), 0);
+    let switches = 0;
+    dayBlocksRaw.forEach((b, i) => { if (i && dayBlocksRaw[i - 1].c !== b.c) switches++; });
+    const metrics = [
+      { k: 'разметка', v: this.dur(totalPlanned) + ' / 24 ч', tone: 'ink' },
+      { k: 'вне сетки', v: this.dur(Math.max(0, start - dayBlocksRaw.filter(b => b.s < start).reduce((a, b) => a + (Math.min(b.e, start) - b.s), 0))), tone: 'mute' },
+      { k: 'не размечено', v: this.dur(gapsMin), tone: 'warn' },
+      { k: 'блоков', v: String(dayBlocksRaw.length), tone: 'mute' },
+      { k: 'deep всего', v: catMin.deep ? this.dur(catMin.deep) : '—', tone: 'accent' },
+      { k: 'окно deep', v: longestDeep ? this.dur(longestDeep) : '—', tone: 'accent' },
+      { k: 'переключений', v: String(switches), tone: 'mute' },
+      { k: 'первая точка', v: dayBlocksRaw.length ? this.fmt(dayBlocksRaw[0].s) : '—', tone: 'mute' },
+      { k: 'последняя', v: dayBlocksRaw.length ? this.fmt(dayBlocksRaw[dayBlocksRaw.length - 1].e) : '—', tone: 'mute' }
+    ].map(m => ({
+      k: m.k, v: m.v,
+      style: 'margin-left: auto; color: ' + (m.tone === 'warn' ? 'var(--warn)' : m.tone === 'accent' ? 'var(--accent)' : m.tone === 'mute' ? 'var(--muted)' : 'var(--ink-bright)') + ';'
+    }));
+
+    /* themes */
+    const th = this.theme;
+    const themeOpts = this.themes.map(t => ({
+      label: t.label, onPick: () => this.setState({ theme: t.id }),
+      dotStyle: 'width: 8px; height: 8px; border-radius: 2px; background: ' + t.swatch + '; flex: none;' + (t.id === th.id ? ' box-shadow: 0 0 8px ' + t.swatch + ';' : ''),
+      style: 'display: flex; align-items: center; gap: 6px; padding: 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 11px; border-radius: 3px;'
+        + ' color: ' + (t.id === th.id ? 'var(--ink-bright)' : 'var(--muted)') + ';'
+        + ' background: ' + (t.id === th.id ? 'rgba(var(--accent-rgb),0.07)' : 'transparent') + ';'
+        + ' border: 1px solid ' + (t.id === th.id ? 'var(--accent-dim)' : 'var(--border)') + ';'
+    }));
+
+    /* block dialog */
+    const dl = S.dlg;
+    const catOpts = cats.map(c => ({
+      label: c.label, onPick: () => this.patchDlg({ c: c.id }),
+      style: 'font-family: var(--mono); font-size: 12px; padding: 6px 11px; border-radius: 3px; cursor: pointer; background: '
+        + (dl && dl.c === c.id ? 'color-mix(in srgb, ' + c.color + ' 16%, var(--panel-2))' : 'transparent')
+        + '; border: 1px solid ' + (dl && dl.c === c.id ? c.color : 'var(--border)') + '; color: ' + (dl && dl.c === c.id ? c.color : 'var(--muted)') + ';'
+    }));
+    const nudges = [15, 30, 45, 60, 90, 120].map(n => ({ label: n + ' мин', onPick: () => this.patchDlg({ e: Math.min(1440, dl.s + n) }) }));
+    const conflict = dl ? this.list(dl.date).filter(b => b.id !== dl.id && dl.s < b.e && b.s < dl.e) : [];
+
+    /* dup dialog */
+    const dp = S.dup;
+    const wdSel = dp ? dp.wd : [1, 2, 3, 4, 5];
+    const scopeDefs = [
+      { id: 'tomorrow', label: 'на завтра', hint: this.key(this.add(dp ? this.dt(dp.date) : d0, 1)) },
+      { id: 'restweek', label: 'до конца недели', hint: 'включая выходные' },
+      { id: 'workweek', label: 'на будни этой недели', hint: 'пн–пт' },
+      { id: 'week', label: 'на всю неделю', hint: 'пн–вс' },
+      { id: 'month', label: 'на весь месяц', hint: dp ? this.monthsNom[this.dt(dp.date).getMonth()] : '' },
+      { id: 'weekdays', label: 'на выбранные дни недели', hint: '4 недели вперёд' },
+      { id: 'quarter', label: 'на квартал вперёд', hint: '90 дней' }
+    ];
+    const dupScopes = scopeDefs.map(sd => {
+      const on = dp && dp.scope === sd.id;
+      const n = dp ? this.targetsFor(sd.id, wdSel).length : 0;
+      return {
+        label: sd.label, note: sd.hint + ' · ' + n + ' дн.',
+        mark: on ? '●' : '○',
+        markStyle: 'color: ' + (on ? 'var(--accent)' : 'var(--faint)') + '; font-size: 11px;',
+        onPick: () => this.patchDup({ scope: sd.id }),
+        style: 'display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px; cursor: pointer; font-family: var(--mono); border-radius: 4px;'
+          + ' background: ' + (on ? 'rgba(var(--accent-rgb),0.06)' : 'transparent') + '; border: 1px solid ' + (on ? 'var(--accent-dim)' : 'var(--border)') + ';'
+      };
+    });
+    const dupWdays = [1, 2, 3, 4, 5, 6, 0].map(n => ({
+      label: this.wdShort[n], cls: wdSel.indexOf(n) >= 0 ? 'chip active' : 'chip', onPick: () => this.toggleWd(n)
+    }));
+    const dupModes = [
+      { id: 'replace', label: 'заменить сутки целиком', sub: 'старая разметка дня удаляется' },
+      { id: 'merge', label: 'добавить поверх', sub: 'пересекающиеся блоки уступают новым' }
+    ].map(m => {
+      const on = dp && dp.mode === m.id;
+      return {
+        label: m.label, sub: m.sub, mark: on ? '●' : '○',
+        markStyle: 'color: ' + (on ? 'var(--accent)' : 'var(--faint)') + '; font-size: 11px; flex: none;',
+        style: 'display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px 12px; cursor: pointer; font-family: var(--mono); border-radius: 4px;'
+          + ' background: ' + (on ? 'rgba(var(--accent-rgb),0.06)' : 'transparent') + '; border: 1px solid ' + (on ? 'var(--accent-dim)' : 'var(--border)') + ';',
+        onPick: () => this.patchDup({ mode: m.id })
+      };
+    });
+    const dupTargetsN = dp ? this.targetsFor(dp.scope, wdSel).length : 0;
+    const dupItems = dp ? (dp.blockId ? 1 : this.list(dp.date).length) : 0;
+
+    return {
+      crtOn: this.props.crt ?? true,
+      balanceOn: this.props.showBalance ?? true,
+      view: S.view, isDay: S.view === 'day', isWeek: S.view === 'week', isMonth: S.view === 'month',
+      dateKey: S.date, rangeLabel: rangeLabel, rangeSub: rangeSub,
+      prev: () => this.shift(-1), next: () => this.shift(1), goToday: () => this.setState({ date: this.today }),
+      setDay: () => this.setState({ view: 'day' }), setWeek: () => this.setState({ view: 'week' }), setMonth: () => this.setState({ view: 'month' }),
+      chipDay: S.view === 'day' ? 'chip active' : 'chip',
+      chipWeek: S.view === 'week' ? 'chip active' : 'chip',
+      chipMonth: S.view === 'month' ? 'chip active' : 'chip',
+      openNewQuick: () => this.openNew(S.date, 9 * 60),
+      openDupDay: () => this.openDup('week', null),
+      openDupWeekAll: () => this.openDup('weekdays', null),
+      openDupMonth: () => this.openDup('month', null),
+      hours: hours, slots: slots, dayBlocks: dayBlocks,
+      dayCountLabel: dayBlocksRaw.length + ' блоков, ' + this.dur(totalPlanned),
+      showNow: isToday && S.view === 'day',
+      nowLabel: this.fmt(this.nowMin),
+      nowStyle: 'position: absolute; left: 0; right: 0; top: ' + ((this.nowMin - start) * ppm) + 'px; height: 1px; background: var(--accent); box-shadow: 0 0 12px var(--accent); pointer-events: none;',
+      weekHours: weekHours, weekDays: weekDays,
+      wdHead: wdHead, monthDays: monthDays,
+      balance: balance, dayStrip: dayStrip, metrics: metrics,
+      themeAttr: th.attr, themeOpts: themeOpts,
+      nowTitle: nowTitle, nowMeta: nowMeta,
+      nowBarStyle: 'height: 100%; width: ' + nowPct + '%; background: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb),0.6);',
+      nextLabel: nxt ? this.fmt(nxt.s) + ' · ' + nxt.t : 'сутки закрыты',
+      gaps: gaps, gapsTotal: gapsMin ? this.dur(gapsMin) : '0 мин',
+      gapsEmptyStyle: gaps.length ? 'display: none;' : 'color: var(--faint); font-size: 11px;',
+      plannedLabel: this.dur(totalPlanned),
+      freeLabel: this.dur(1440 - totalPlanned),
+      blocksLabel: String(dayBlocksRaw.length),
+      templates: this.templates.map(t => ({
+        name: t.name, meta: t.meta, note: t.note, onApply: () => this.applyTemplate(t),
+        style: 'display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 7px 9px; border: 1px solid var(--border); border-radius: 3px; background: transparent; cursor: pointer; font-family: var(--mono); transition: border-color .14s ease, background .14s ease;'
+      })),
+      /* block dialog */
+      dlgOpen: !!dl,
+      isEdit: !!(dl && dl.mode === 'edit'),
+      dlgBar: dl ? 'shff-plan ' + (dl.mode === 'edit' ? 'edit' : 'add') + ' ' + dl.date : '',
+      dlgTitle: dl ? (dl.mode === 'edit' ? 'Правка блока' : 'Новый блок в сутках') : '',
+      dlgLede: dl ? this.wdFull[this.dt(dl.date).getDay()] + ', ' + this.dt(dl.date).getDate() + ' ' + this.months[this.dt(dl.date).getMonth()] + ' — поминутно, без «на весь день».' : '',
+      dTitle: dl ? dl.t : '', dNote: dl ? dl.note : '',
+      dStart: dl ? this.fmt(dl.s) : '00:00', dEnd: dl ? this.fmt(dl.e) : '00:00',
+      dDur: dl ? this.dur(Math.max(0, dl.e - dl.s)) : '',
+      onTitle: e => this.patchDlg({ t: e.target.value }),
+      onNote: e => this.patchDlg({ note: e.target.value }),
+      onStart: e => this.patchDlg({ s: this.parse(e.target.value) }),
+      onEnd: e => this.patchDlg({ e: this.parse(e.target.value) }),
+      catOpts: catOpts, nudges: nudges,
+      dlgWarn: conflict.length > 0,
+      dlgWarnText: conflict.length ? 'Пересекается с: ' + conflict.map(b => b.t + ' (' + this.fmt(b.s) + '–' + this.fmt(b.e) + ')').join(', ') + '. При сохранении эти блоки уступят место.' : '',
+      saveBlock: () => this.saveBlock(),
+      delBlock: () => this.delBlock(),
+      dupThis: () => this.openDup('weekdays', dl ? dl.id : null),
+      closeDlg: () => this.setState({ dlg: null }),
+      stop: e => e.stopPropagation(),
+      /* dup dialog */
+      dupOpen: !!dp,
+      dupBar: dp ? 'shff-plan copy --from ' + dp.date : '',
+      dupTitle: dp ? (dp.blockId ? 'Дублировать блок' : 'Дублировать сутки') : '',
+      dupLede: dp ? (dp.blockId ? 'Один блок уедет в выбранные дни, остальная разметка не тронется.' : 'Разметка ' + dp.date + ' (' + dupItems + ' блоков, ' + this.dur(this.planned(dp.date)) + ') станет шаблоном для выбранного диапазона.') : '',
+      dupScopes: dupScopes, dupWdays: dupWdays, dupModes: dupModes,
+      dupCmd: dp ? 'shff-plan copy --from ' + dp.date + ' --to ' + dp.scope + (dp.mode === 'replace' && !dp.blockId ? ' --replace' : ' --merge') : '',
+      dupPreview: '// затронет ' + dupTargetsN + ' дн. · перенесётся ' + dupItems + ' блоков в каждый · отменяемо',
+      applyDup: () => this.applyDup(),
+      closeDup: () => this.setState({ dup: null }),
+      toasts: S.toasts.map(t => ({
+        title: t.title, text: t.text, cls: ['toast', t.tone].filter(Boolean).join(' '),
+        onClose: () => this.setState(s => ({ toasts: s.toasts.filter(x => x.id !== t.id) }))
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

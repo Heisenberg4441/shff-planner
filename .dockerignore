@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/dist
+data
+.git
+.gitignore
+.env
+.env.local
+prototype
+coverage
+*.log
+*.tsbuildinfo
+docs/screenshots

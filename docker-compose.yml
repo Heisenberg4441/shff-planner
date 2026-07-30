@@ -1,0 +1,46 @@
+name: shff-planner
+
+services:
+  planner:
+    # по умолчанию берётся опубликованный образ; `up --build` собирает из исходников
+    image: ${SHFF_IMAGE:-heisenberg4441/shff-planner:latest}
+    build:
+      context: .
+    container_name: shff-planner
+    restart: unless-stopped
+    ports:
+      # слева — порт на хосте, справа — порт внутри контейнера
+      - '${SHFF_HOST_PORT:-8787}:8787'
+    environment:
+      TZ: ${TZ:-Europe/Moscow}
+      # обычно пусто: администратор заводится при первом заходе в панель
+      SHFF_AUTH_PASSWORD: ${SHFF_AUTH_PASSWORD:-}
+      SHFF_AUTH_LOGIN: ${SHFF_AUTH_LOGIN:-admin}
+      SHFF_SESSION_SECRET: ${SHFF_SESSION_SECRET:-}
+      SHFF_SEED: ${SHFF_SEED:-none}
+      SHFF_LOG_LEVEL: ${SHFF_LOG_LEVEL:-info}
+      SHFF_TRUST_PROXY: ${SHFF_TRUST_PROXY:-false}
+    volumes:
+      # вся база планировщика — здесь. Бекап тома = бекап планировщика
+      - planner-data:/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:8787/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    # сервис пишет только в /data, поэтому корень можно держать только для чтения
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  planner-data:
