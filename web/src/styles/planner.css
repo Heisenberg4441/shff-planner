@@ -364,6 +364,17 @@
   border-color: var(--danger);
 }
 
+/* на телефоне важнее, ЧТО делаешь, а не сколько это длится:
+   длительность уходит, название получает место */
+@media (max-width: 560px) {
+  .pl-block-dur {
+    display: none;
+  }
+  .pl-block-time {
+    font-size: 10px;
+  }
+}
+
 .pl-now {
   position: absolute;
   left: 0;
