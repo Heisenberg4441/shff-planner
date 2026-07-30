@@ -89,11 +89,48 @@ jobs:
 
       - name: логи контейнера, если упало
         if: failure()
-        run: docker logs shff-ci
+        run: docker logs shff-ci || true
 
       - name: убрать контейнер
         if: always()
-        run: docker rm -f shff-ci
+        run: docker rm -f shff-ci || true
+
+      # То же самое под arm64 — и это не формальность. Собранный arm64-образ
+      # может не стартовать по причинам, которых на amd64 не видно: у нативных
+      # модулей свои требования к glibc. Ловим здесь, а не на чужой малине.
+      - name: собрать arm64-образ
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          load: true
+          tags: shff-planner:ci-arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: поднять arm64-контейнер под эмуляцией
+        run: |
+          docker run -d --name shff-ci-arm64 --platform linux/arm64 \
+            -p 8788:8787 shff-planner:ci-arm64
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8788/api/health > /dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:8788/api/health
+
+      - name: смоук по arm64-образу
+        run: |
+          curl -fsS -X POST http://127.0.0.1:8788/api/auth/setup \
+            -H 'Content-Type: application/json' -d '{"mode":"open"}' > /dev/null
+          node scripts/smoke.mjs http://127.0.0.1:8788
+
+      - name: логи arm64, если упало
+        if: failure()
+        run: docker logs shff-ci-arm64 || true
+
+      - name: убрать arm64-контейнер
+        if: always()
+        run: docker rm -f shff-ci-arm64 || true
 
       # публикуем только с master и тегов, и только после зелёного смоука
       - name: вход в Docker Hub

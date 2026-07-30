@@ -9,10 +9,15 @@
 #  одноплатнике). Чтобы не гонять tsc и vite под эмуляцией,
 #  JS собирается на платформе сборщика — он от архитектуры не
 #  зависит, — а под целевую ставится только better-sqlite3.
+#
+#  База — Debian 13 (trixie), и это не вкусовщина. better-sqlite3
+#  всегда предпочитает свой готовый бинарь из prebuilds/, а его
+#  arm64-сборка требует GLIBC 2.38. В bookworm 2.36 — образ поднимался
+#  на amd64 и падал на Raspberry Pi. В trixie 2.41, хватает обоим.
 # ============================================================
 
 # ---------- 1. сборка JS: всегда на архитектуре сборщика ----------
-FROM --platform=$BUILDPLATFORM node:22-bookworm-slim AS build
+FROM --platform=$BUILDPLATFORM node:22-trixie-slim AS build
 
 WORKDIR /app
 ENV NODE_ENV=development
@@ -33,13 +38,15 @@ COPY _ds ./_ds
 RUN npm run build
 
 # ---------- 2. зависимости рантайма: под целевую архитектуру ----------
-FROM node:22-bookworm-slim AS deps
+FROM node:22-trixie-slim AS deps
 
 WORKDIR /app
 ENV NODE_ENV=development
 
-# better-sqlite3 тянет готовый бинарь, но если под платформу его нет —
-# собирается из исходников, поэтому компилятор нужен здесь
+# Компилятор нужен не для сборки better-sqlite3 (он приезжает готовым),
+# а для того, чтобы npm сумел выполнить его binding.gyp: gyp — это python,
+# и он запускается даже когда решает ничего не собирать. Заодно это
+# страховка на случай платформы, под которую готового бинаря нет.
 RUN apt-get update \
   && apt-get install -y --no-install-recommends python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
@@ -50,7 +57,7 @@ COPY web/package.json web/package.json
 RUN npm ci --omit=dev --no-audit --no-fund
 
 # ---------- 3. рантайм ----------
-FROM node:22-bookworm-slim AS runtime
+FROM node:22-trixie-slim AS runtime
 
 ENV NODE_ENV=production \
     SHFF_HOST=0.0.0.0 \
