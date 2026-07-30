@@ -124,17 +124,18 @@ jobs:
             org.opencontainers.image.title=SHFF Planner
             org.opencontainers.image.description=Поминутный планировщик суток. Self-hosted, локальная база, без трекинга.
 
-      # arm64 добавляется одной строкой: platforms: linux/amd64,linux/arm64.
-      # Пока не включено осознанно: у better-sqlite3 нет готовых бинарей,
-      # он компилируется из исходников, а под QEMU это долго (десятки минут).
-      # Если планировщик поедет на одноплатник — включай и запасись терпением
-      # на первую сборку, дальше вытянет кеш слоёв.
+      # arm64 — ради одноплатников (Raspberry Pi и родня). Собирается через
+      # эмуляцию и потому долго: у better-sqlite3 нет готовых бинарей, он
+      # компилируется из исходников. JS-часть от архитектуры не зависит и
+      # собирается нативно (см. --platform=$BUILDPLATFORM в Dockerfile),
+      # под QEMU уходит только компиляция нативного модуля.
       - name: собрать и запушить
         if: github.event_name != 'pull_request'
+        timeout-minutes: 90
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
