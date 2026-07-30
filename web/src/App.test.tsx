@@ -181,6 +181,29 @@ describe('планировщик целиком', () => {
     expect(screen.getByText(/затронет 6 дней · перенесётся 2 блока в каждый · отменяемо/)).toBeTruthy();
   });
 
+  it('честно предупреждает, что выходные пропустит, и умеет включить все дни', async () => {
+    render(<App />);
+    await screen.findByText('Обед');
+
+    fireEvent.click(screen.getByText(/Дублировать день/));
+    await screen.findByText('Дублировать сутки');
+
+    // «на всю неделю» фильтр не применяет — и не показывает мёртвых кнопок
+    expect(screen.queryByText('В какие дни недели раскатывать')).toBeNull();
+
+    fireEvent.click(screen.getByText('на квартал вперёд'));
+
+    expect(await screen.findByText('В какие дни недели раскатывать')).toBeTruthy();
+    // предупреждение стоит дважды: под галочками и в строке перед кнопкой
+    expect(screen.getAllByText(/сб, вс пропустим/).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText(/затронет .* \(сб, вс пропустим\)/)).toBeTruthy();
+
+    fireEvent.click(screen.getByText('все дни'));
+
+    expect(await screen.findByText(/заполним каждый день диапазона/)).toBeTruthy();
+    expect(screen.queryByText(/пропустим/)).toBeNull();
+  });
+
   it('переключает вид по горячим клавишам', async () => {
     render(<App />);
     await screen.findByText('Обед');

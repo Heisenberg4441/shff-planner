@@ -37,6 +37,8 @@ const MODES = [
 ];
 
 const WEEKDAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
+const WORKDAYS = [1, 2, 3, 4, 5];
+const ALL_WEEKDAYS = [0, 1, 2, 3, 4, 5, 6];
 
 export function DuplicateDialog(): ReactNode {
   const { state, actions, blocksOf } = usePlanner();
@@ -48,6 +50,10 @@ export function DuplicateDialog(): ReactNode {
   const targets = duplicationTargets(dup.date, dup.scope, dup.weekdays);
   const weekdayAware = WEEKDAY_AWARE_SCOPES.includes(dup.scope);
   const effectiveMode = dup.blockId ? 'merge' : dup.mode;
+
+  const picked = WEEKDAY_ORDER.filter((d) => dup.weekdays.includes(d)).map((d) => WD_SHORT[d]);
+  const skipped = WEEKDAY_ORDER.filter((d) => !dup.weekdays.includes(d)).map((d) => WD_SHORT[d]);
+  const everyDay = skipped.length === 0;
 
   return (
     <Dialog
@@ -98,27 +104,47 @@ export function DuplicateDialog(): ReactNode {
         })}
       </div>
 
-      <div className="pl-section">
-        <span className="field-label pl-section-label">
-          Только эти дни недели{' '}
-          <span style={{ color: 'var(--faint)' }}>
-            // для режимов «месяц», «дни недели» и «квартал»
-          </span>
-        </span>
-        <div className="pl-chips">
-          {WEEKDAY_ORDER.map((weekday) => (
+      {/* Фильтр показываем только там, где он работает: мёртвые контролы
+          в диалоге хуже, чем их отсутствие. */}
+      {weekdayAware && (
+        <div className="pl-section">
+          <span className="field-label pl-section-label">В какие дни недели раскатывать</span>
+          <div className="pl-chips">
+            {WEEKDAY_ORDER.map((weekday) => (
+              <button
+                key={weekday}
+                type="button"
+                className={cx('chip', dup.weekdays.includes(weekday) && 'active')}
+                style={{ minWidth: 40 }}
+                onClick={() => actions.toggleWeekday(weekday)}
+              >
+                {WD_SHORT[weekday]}
+              </button>
+            ))}
             <button
-              key={weekday}
               type="button"
-              className={cx('chip', dup.weekdays.includes(weekday) && 'active')}
-              style={{ minWidth: 40, opacity: weekdayAware ? 1 : 0.5 }}
-              onClick={() => actions.toggleWeekday(weekday)}
+              className="chip"
+              onClick={() =>
+                actions.patchDup({
+                  weekdays: everyDay ? WORKDAYS.slice() : ALL_WEEKDAYS.slice(),
+                })
+              }
             >
-              {WD_SHORT[weekday]}
+              {everyDay ? 'только будни' : 'все дни'}
             </button>
-          ))}
+          </div>
+          <div className="pl-note" style={{ marginTop: 8 }}>
+            {skipped.length ? (
+              <>
+                // заполним {picked.join(', ') || '—'} ·{' '}
+                <span style={{ color: 'var(--warn)' }}>{skipped.join(', ')} пропустим</span>
+              </>
+            ) : (
+              '// заполним каждый день диапазона, включая выходные'
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {dup.blockId ? (
         <div className="pl-section pl-note">
@@ -154,7 +180,9 @@ export function DuplicateDialog(): ReactNode {
         </span>
         <span className="pl-cmd-note">
           {targets.length
-            ? `// затронет ${pluralDays(targets.length)} · перенесётся ${pluralBlocks(items.length)} в каждый · отменяемо`
+            ? `// затронет ${pluralDays(targets.length)}${
+                weekdayAware && skipped.length ? ` (${skipped.join(', ')} пропустим)` : ''
+              } · перенесётся ${pluralBlocks(items.length)} в каждый · отменяемо`
             : '// в выбранном диапазоне нет дней — отметь дни недели или смени режим'}
         </span>
       </div>
